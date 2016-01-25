@@ -13,4 +13,4 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [com.taoensso/timbre "4.2.1"]]
 
-  :repl-options {:init-ns arubaito.core})
+  :repl-options {:init-ns timbre-util.log})

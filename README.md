@@ -16,16 +16,18 @@ Toggling logs on or off:
 user=> (require '[timbre-util.log :as log])
 nil
 
+user=> (log/set-config!)
+;{:level :debug, :output-fn #<timbre$default_output_fn taoensso.timbre$default_output_fn@17870ed0>, :appenders {:color-appender {:enabled? false, :async? false, :min-level nil, :rate-limit nil, :output-fn :inherit, :fn #<log$fn__2628$fn__2630 timbre_util.log$fn__2628$fn__2630@58235e48>}}}
+
 user=> (info "flapjacks are yummy")
-; doesn't print anything (using leiningen here)
+; default is to not print anything
 nil
 
 user=> (log/toggle!) ; toggles logging on
 true
 
 user=> (info "brownies ♡")
-16-01-25 11:58:07 hungryman-MacBook-Pro.local INFO [skybet.some.ns] - brownies ♡
-nil
+; 16-01-25 11:58:07 hungryman-MacBook-Pro.local INFO [skybet.some.ns] - brownies ♡
 
 user=> (log/timbre! false) ; disables logging regardless if it's enabled or not
 false
@@ -33,8 +35,9 @@ false
 
 ### Features
 -------
-  - Beautiful colors for different levels of logging
-  - Logging defaults to disabled when using leiningen and enabled otherwise
+Running `(config-timbre!)` will do the following:
+  - set up beautiful colors for different levels of logging
+  - disable logging until you run `(toggle!)`
   - Toggling logs on or off
 
 
