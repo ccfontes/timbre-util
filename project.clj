@@ -1,4 +1,4 @@
-(defproject ccfontes/timbre-util "0.1.0"
+(defproject ccfontes/timbre-util "0.1.1"
 
   :description "Convenience functions on top of a timbre configuration which are useful for the SkyBet Data team."
 

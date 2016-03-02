@@ -6,6 +6,8 @@
 
 (defonce ^{:private true} log? (atom false))
 
+(def bla (atom nil))
+
 (def ^{:private true} timbre-config
   (let [colors {:info :green, :warn :yellow, :error :red, :fatal :purple, :report :blue}]
     {:level :debug
@@ -17,11 +19,14 @@
           :min-level  nil
           :rate-limit nil
           :output-fn  :inherit
-          :fn (fn [{:keys [error? level output-fn] :as data}]
+          :fn (fn [{:keys [error? level output-fn vargs_ msg-fn] :as data}]
                 (binding [*out* (if error? *err* *out*)]
-                  (if-let [color (colors level)]
-                    (println (color-str color (output-fn data)))
-                    (println (output-fn data)))))}}}))
+                 (let [data (if (= (first @vargs_) "\b")
+                              (assoc data :?err_ (second @vargs_))
+                              data)]
+                   (if-let [color (colors level)]
+                     (println (color-str color (output-fn data)))
+                     (println (output-fn data))))))}}}))
 
 (defn set-config!
   "Configure timbre to use different colors depending on logging level."
