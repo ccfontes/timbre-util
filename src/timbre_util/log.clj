@@ -4,9 +4,7 @@
 
 (defonce ^{:private true} configured? (atom false))
 
-(defonce ^{:private true} log? (atom false))
-
-(def bla (atom nil))
+(defonce ^{:private true} log? (atom true))
 
 (def ^{:private true} timbre-config
   (let [colors {:info :green, :warn :yellow, :error :red, :fatal :purple, :report :blue}]
@@ -14,21 +12,20 @@
      :output-fn default-output-fn
      :appenders
        {:color-appender
-         {:enabled?   false
+         {:enabled?   true
           :async?     false
           :min-level  nil
           :rate-limit nil
           :output-fn  :inherit
           :fn (fn [{:keys [error? level output-fn vargs_ msg-fn] :as data}]
                 (binding [*out* (if error? *err* *out*)]
-                 (let [data (if (= (first @vargs_) "\b")
-                              (assoc data :?err_ (second @vargs_))
-                              data)]
+                 (let [ex (first (filter #(instance? Exception %) @vargs_)) ; OPTIMIZE replace with 'ffilter'
+                       data (assoc data :?err_ ex)]
                    (if-let [color (colors level)]
                      (println (color-str color (output-fn data)))
                      (println (output-fn data))))))}}}))
 
-(defn set-config!
+(defn- set-config!
   "Configure timbre to use different colors depending on logging level."
   [] (timbre/set-config! timbre-config))
 
